@@ -1,20 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { generateImage } from '@/lib/gemini';
 import { userService, imageService } from '@/lib/supabase';
 import type { GenerationRequest, GenerationResponse } from '@/types';
 
-// Schema untuk validasi input
-const generateSchema = z.object({
-  prompt: z.string().min(1, 'Prompt is required').max(1000, 'Prompt is too long'),
-  negative_prompt: z.string().max(500, 'Negative prompt is too long').optional(),
-  style_template: z.string().default('realistic'),
-  aspect_ratio: z.enum(['1:1', '16:9', '9:16', '4:3', '3:4', '21:9']).default('1:1'),
-  quality: z.enum(['standard', 'high', 'ultra', '4k']).default('standard'),
-  seed: z.number().int().min(0).max(999999999).optional(),
-  user_id: z.string().uuid().optional(),
-  api_key: z.string().min(1, 'API key is required'),
-});
+// Manual validation function
+function validateGenerationRequest(data: any): GenerationRequest {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid request body');
+  }
+
+  if (!data.prompt || typeof data.prompt !== 'string') {
+    throw new Error('Prompt is required');
+  }
+
+  if (data.prompt.length > 1000) {
+    throw new Error('Prompt is too long (max 1000 characters)');
+  }
+
+  if (data.negative_prompt && typeof data.negative_prompt !== 'string') {
+    throw new Error('Negative prompt must be a string');
+  }
+
+  if (data.negative_prompt && data.negative_prompt.length > 500) {
+    throw new Error('Negative prompt is too long (max 500 characters)');
+  }
+
+  const validAspectRatios = ['1:1', '16:9', '9:16', '4:3', '3:4', '21:9'];
+  if (data.aspect_ratio && !validAspectRatios.includes(data.aspect_ratio)) {
+    throw new Error('Invalid aspect ratio');
+  }
+
+  const validQualities = ['standard', 'high', 'ultra', '4k'];
+  if (data.quality && !validQualities.includes(data.quality)) {
+    throw new Error('Invalid quality setting');
+  }
+
+  if (!data.api_key || typeof data.api_key !== 'string') {
+    throw new Error('API key is required');
+  }
+
+  return {
+    prompt: data.prompt,
+    negative_prompt: data.negative_prompt,
+    style_template: data.style_template || 'realistic',
+    aspect_ratio: data.aspect_ratio || '1:1',
+    quality: (data.quality as any) || 'standard',
+    seed: data.seed,
+    user_id: data.user_id,
+    api_key: data.api_key,
+  };
+}
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000; // 24 hours
@@ -56,7 +91,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse dan validate request body
     const body = await request.json();
-    const validatedData = generateSchema.parse(body);
+    const validatedData = validateGenerationRequest(body);
 
     // Extract API key untuk temporary usage
     const { api_key, user_id, ...generationRequest } = validatedData;
@@ -201,11 +236,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Generation API error:', error);
 
-    if (error instanceof z.ZodError) {
-      return errorResponse(
-        `Validation error: ${error.errors.map(e => e.message).join(', ')}`,
-        400
-      );
+    if (error instanceof Error && (
+        error.message.includes('Prompt is required') ||
+        error.message.includes('API key is required') ||
+        error.message.includes('Invalid request body') ||
+        error.message.includes('too long') ||
+        error.message.includes('Invalid'))) {
+      return errorResponse(error.message, 400);
     }
 
     if (error instanceof Error) {
