@@ -1,7 +1,7 @@
 {
   "name": "ai-image-studio-pro",
   "version": "2.0.0",
-  "description": "AI Image Studio Pro - Generator Gambar AI Gratis dengan PWA",
+  "description": "AI Image Studio Pro - Generator Gambar AI Gratis dengan PWA - Ready for Vercel Auto-Deploy",
   "private": true,
   "scripts": {
     "dev": "next dev",
