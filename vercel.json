@@ -1,9 +1,6 @@
 {
-  "name": "generate-image",
+  "name": "generate_image",
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_APP_NAME": "AI Image Studio Pro",
@@ -13,12 +10,6 @@
     "DAILY_GENERATION_LIMIT": "50",
     "MONTHLY_GENERATION_LIMIT": "1500",
     "NEXT_TELEMETRY_DISABLED": "1"
-  },
-  "functions": {
-    "src/app/api/**/*.ts": {
-      "runtime": "edge",
-      "maxDuration": 30
-    }
   },
   "headers": [
     {
