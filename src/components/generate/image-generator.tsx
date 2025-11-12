@@ -88,7 +88,6 @@ export default function ImageGenerator() {
       toast({
         title: 'Error',
         description: 'Prompt tidak boleh kosong',
-        variant: 'destructive',
       });
       return;
     }

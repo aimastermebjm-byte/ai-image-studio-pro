@@ -77,7 +77,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   applicationName: 'AI Image Studio Pro',
-  appDescription: 'Generator Gambar AI Gratis dengan PWA',
 };
 
 export default function RootLayout({

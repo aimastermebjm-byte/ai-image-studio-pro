@@ -11,6 +11,9 @@ export async function GET() {
     version: process.env.npm_package_version || '2.0.0',
     environment: process.env.NODE_ENV || 'development',
     services: {} as Record<string, any>,
+    runtime: {} as Record<string, any>,
+    memory: {} as Record<string, any>,
+    response_time: 0,
   };
 
   try {

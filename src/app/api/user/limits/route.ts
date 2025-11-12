@@ -106,11 +106,18 @@ export async function POST(request: NextRequest) {
 
     // Reset user count
     if (type === 'daily' || type === 'all') {
-      await userService.resetDailyCount(user_id);
+      // TODO: Implement resetDailyCount method in userService
+      await userService.updateUser(user_id, {
+        generation_count_today: 0,
+        last_generation_reset: new Date().toISOString()
+      });
     }
 
     if (type === 'monthly' || type === 'all') {
-      await userService.resetMonthlyCount(user_id);
+      // TODO: Implement resetMonthlyCount method in userService
+      await userService.updateUser(user_id, {
+        generation_count_month: 0,
+      });
     }
 
     return NextResponse.json({
