@@ -150,4 +150,4 @@ export async function OPTIONS() {
   });
 }
 
-export const runtime = 'edge';
+// export const runtime = 'edge'; // Disabled for SSR compatibility
