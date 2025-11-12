@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
       };
 
       // Add user limits info if available
-      if (userLimits) {
+      if (userLimits && response.data) {
         response.data = {
           ...response.data,
           user_limits: {
