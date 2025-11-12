@@ -63,3 +63,18 @@ export function getBase64(file: File): Promise<string> {
     reader.onerror = (error) => reject(error);
   });
 }
+
+export function getNetworkStatus() {
+  const connection = (navigator as any).connection ||
+                    (navigator as any).mozConnection ||
+                    (navigator as any).webkitConnection;
+
+  return {
+    effectiveType: connection?.effectiveType || 'unknown',
+    downlink: connection?.downlink || null,
+    rtt: connection?.rtt || null,
+    saveData: connection?.saveData || false,
+    online: navigator.onLine,
+    type: 'unknown'
+  };
+}

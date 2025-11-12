@@ -45,10 +45,10 @@ function checkRateLimit(userId: string, type: 'daily' | 'monthly', limit: number
 
 // Error response helper
 function errorResponse(message: string, status = 400) {
-  return NextResponse.json(
+  return addHeaders(NextResponse.json(
     { success: false, error: message },
     { status }
-  );
+  ));
 }
 
 // POST /api/generate
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
         };
       }
 
-      return NextResponse.json(response);
+      return addHeaders(NextResponse.json(response));
 
     } finally {
       // Restore original API key
@@ -304,10 +304,10 @@ export async function GET() {
   });
 }
 
-// Rate limit headers untuk semua responses
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+export const runtime = 'edge';
 
+// Helper untuk menambah headers ke response
+function addHeaders(response: NextResponse) {
   // Add CORS headers
   response.headers.set('Access-Control-Allow-Origin', '*');
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -320,4 +320,7 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
-export const runtime = 'edge';
+// OPTIONS method untuk CORS
+export async function OPTIONS() {
+  return addHeaders(new NextResponse(null, { status: 200 }));
+}
