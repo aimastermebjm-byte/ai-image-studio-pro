@@ -56,16 +56,28 @@ export async function GET() {
     }
 
     // Check if it's running in Edge Runtime
-    if (typeof EdgeRuntime !== 'undefined') {
+    try {
+      // EdgeRuntime check
+      const isEdge = typeof process !== 'undefined' &&
+                    typeof process.versions !== 'undefined' &&
+                    typeof process.versions.edge !== 'undefined';
+
+      if (isEdge) {
+        health.runtime = {
+          type: 'edge',
+          platform: 'vercel-edge',
+        };
+      } else {
+        health.runtime = {
+          type: 'nodejs',
+          version: process.version,
+          platform: process.platform,
+        };
+      }
+    } catch (error) {
       health.runtime = {
-        type: 'edge',
-        platform: EdgeRuntime,
-      };
-    } else {
-      health.runtime = {
-        type: 'nodejs',
-        version: process.version,
-        platform: process.platform,
+        type: 'unknown',
+        platform: 'unknown',
       };
     }
 
