@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     default: 'AI Image Studio Pro - Generator Gambar AI Gratis',
     template: '%s | AI Image Studio Pro',
   },
-  description: 'Generate gambar AI berkualitas tinggi secara gratis dengan Google Gemini API. Progressive Web App dengan offline support.',
+  description: 'Generate gambar AI berkualitas tinggi secara gratis dengan Google Gemini API. PWA dengan offline support dan 50 gambar/hari.',
   keywords: [
     'AI Image Generator',
     'Gambar AI',
