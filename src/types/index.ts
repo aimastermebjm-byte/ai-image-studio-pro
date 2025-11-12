@@ -78,6 +78,10 @@ export interface GenerationResponse {
     thumbnail_url: string;
     metadata: ImageMetadata;
     generation_time: number;
+    user_limits?: {
+      daily_remaining: number;
+      monthly_remaining: number;
+    };
   };
   error?: string;
   message?: string;
