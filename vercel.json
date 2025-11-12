@@ -1,24 +1,18 @@
 {
   "name": "ai-image-studio-pro",
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_APP_NAME": "AI Image Studio Pro",
     "NEXT_PUBLIC_APP_VERSION": "2.0.0",
     "NEXT_PUBLIC_PWA_ENABLED": "true",
     "NEXT_PUBLIC_OFFLINE_SUPPORTED": "true",
     "DAILY_GENERATION_LIMIT": "50",
-    "MONTHLY_GENERATION_LIMIT": "1500"
-  },
-  "build": {
-    "env": {
-      "NEXT_TELEMETRY_DISABLED": "1"
-    }
+    "MONTHLY_GENERATION_LIMIT": "1500",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   "functions": {
     "src/app/api/**/*.ts": {
