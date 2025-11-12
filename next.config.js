@@ -1,13 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-
-  // PWA Configuration
-  experimental: {
-    ppr: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-  },
 
   // Image optimization
   images: {
@@ -21,17 +14,24 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_NAME: 'AI Image Studio Pro',
     NEXT_PUBLIC_APP_VERSION: '2.0.0',
+    NEXT_PUBLIC_PWA_ENABLED: 'true',
+    NEXT_PUBLIC_OFFLINE_SUPPORTED: 'true',
   },
 
-  // Headers untuk PWA
+  // Headers untuk PWA dan Security
   async headers() {
     return [
+      // PWA headers
       {
         source: '/sw.js',
         headers: [
           {
             key: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
           },
         ],
       },
@@ -44,12 +44,16 @@ const nextConfig = {
           },
         ],
       },
-    ];
-  },
-
-  // Security headers
-  async headers() {
-    return [
+      {
+        source: '/icons/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Security headers
       {
         source: '/(.*)',
         headers: [
@@ -65,12 +69,16 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
         ],
       },
     ];
   },
 
-  // Bundle analyzer
+  // Bundle analyzer (conditional)
   ...(process.env.ANALYZE === 'true' && {
     webpack: (config) => {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -83,9 +91,6 @@ const nextConfig = {
       return config;
     },
   }),
-
-  // Output configuration untuk standalone deployment
-  output: 'standalone',
 
   // Compress responses
   compress: true,
