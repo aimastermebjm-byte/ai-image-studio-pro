@@ -37,6 +37,7 @@ export interface ImageMetadata {
   generation_time: number;
   token_count?: number;
   file_size: number;
+  quality?: string;
 }
 
 export interface StyleTemplate {
@@ -68,6 +69,7 @@ export interface GenerationRequest {
   quality: 'standard' | 'high' | 'ultra' | '4k';
   seed?: number;
   user_id?: string;
+  api_key?: string;
 }
 
 export interface GenerationResponse {

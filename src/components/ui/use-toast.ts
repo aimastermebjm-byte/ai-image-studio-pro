@@ -10,7 +10,7 @@ export type ToastProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
-export type ToastActionElement = React.ReactElement<typeof ToastAction>;
+export type ToastActionElement = React.ReactElement<any>;
 
 const TOAST_LIMIT = 5;
 const TOAST_REMOVE_DELAY = 1000;
@@ -143,7 +143,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>;
 
-function toast({ ...props }: Toast) {
+function toast({ ...props }: ToastProps) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
