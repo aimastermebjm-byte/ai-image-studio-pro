@@ -49,13 +49,6 @@ export const metadata: Metadata = {
     description: 'Generate gambar AI berkualitas tinggi secara gratis dengan Google Gemini API.',
     images: ['/og-image.png'],
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
-  themeColor: '#10b981',
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -78,6 +71,15 @@ export const metadata: Metadata = {
   },
   applicationName: 'AI Image Studio Pro',
 };
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+export const themeColor = '#10b981';
 
 export default function RootLayout({
   children,
